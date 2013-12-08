@@ -1,0 +1,23 @@
+---
+- hosts: all
+  vars:
+    username: danielheath
+    src: //stora/FamilyLibrary
+    dest: /media/stora
+    credfile: /etc/smbcredentials
+  vars_prompt:
+    - name: "password"
+      prompt: "Enter smb password"
+      private: yes
+  tasks:
+  - name: install cifs
+    apt: pkg=cifs-utils state=latest
+  - name: write the credentials config file
+    sudo: yes
+    template: src=credentials dest={{credfile}}
+  - name: secure the credentials config file
+    sudo: yes
+    shell: chmod 600 {{credfile}}
+  - name: configure mountpoint for cifs
+    sudo: yes
+    mount: src={{src}} name={{dest}} fstype=cifs opts="credentials={{credfile}},iocharset=utf8,sec=ntlm" dump=0 passno=0 state=mounted
