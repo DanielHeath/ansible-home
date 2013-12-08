@@ -1,0 +1,10 @@
+---
+- hosts: all
+  vars:
+    allowed_users: daniel
+  tasks:
+  - name: install fail2ban
+    apt: pkg=fail2ban state=latest
+  - name: write the sshd config file
+    sudo: yes
+    template: src=sshd_config dest=/etc/ssh/sshd_config
