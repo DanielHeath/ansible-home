@@ -1,0 +1,27 @@
+---
+- hosts: all
+  tasks:
+  - name: setup dir for aria frontend
+    sudo: yes
+    file: path=/var/www/downloads state=directory
+  - name: install aria frontend
+    unarchive: src=ui.tar.gz dest=/var/www/downloads
+    sudo: yes
+  - name: install aria
+    apt: pkg=aria2 state=latest
+    sudo: yes
+  - name: install supervisord
+    apt: pkg=supervisor state=latest
+    sudo: yes
+#  - name: setup aria daemon in supervisor
+#    template:
+
+
+# TODO:
+# Setup aria2 as a daemon (see supervisor config)
+# /etc/supervisor/conf.d/aria2c
+# http://supervisord.org/configuration.html#program-x-section-settings
+
+# Move UI to 'downloads', not '/var/www/downloads/webui-aria2-master/'
+# Configure aria UI to connect directly to aria by default (instead of localhost)
+
