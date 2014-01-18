@@ -1,0 +1,9 @@
+---
+- hosts: all
+  tasks:
+  - name: install smbd
+    sudo: yes
+    apt: pkg=samba state=latest
+  - name: configure smbd
+    sudo: yes
+    template: src=smb.conf dest=/etc/samba/smb.conf
