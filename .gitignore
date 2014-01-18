@@ -1,1 +1,5 @@
 plans.md
+.DS_Store
+.vagrant
+vagrant_ansible_inventory_default
+
