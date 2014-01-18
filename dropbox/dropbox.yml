@@ -1,0 +1,34 @@
+---
+- hosts: all
+  sudo: yes
+  tasks:
+
+  - name: fetch dropbox binaries
+    get_url: url=https://www.dropbox.com/download/?plat=lnx.x86 dest=/tmp/dropbox.tar.gz
+
+  - name: create dropbox app dir
+    file: path=/usr/local/dropbox state=directory
+
+  - name: extract dropbox binaries
+    shell: cat /tmp/dropbox.tar.gz | tar xz --strip 1 -C /usr/local/dropbox
+
+  - name: create dropbox group
+    group: name=dropbox state=present
+
+  - name: create dropbox user
+    user: name=dropbox group=dropbox home=/etc/dropbox createhome=yes
+
+  - name: grant read for smb
+    file: state=directory path=/etc/dropbox mode=777 recurse=yes
+
+  - name: create dropbox init script
+    copy: src=init.conf dest=/etc/init/dropbox.conf
+
+  - name: Start dropbox
+    command: start dropbox
+
+  - name: fetch logs
+    fetch: src=/var/log/upstart/dropbox.log dest=REMOTE_LOG_YOU_NEED_THIS fail_on_missing=yes
+
+  - name: Read the damn logs.
+    command: the logs; read them.
